@@ -1,0 +1,22 @@
+def dawaj_linie(penetration, value, degrees):
+    linialista = list(zip(penetration, value))
+    liniaarray = np.asarray(linialista)
+    esolinia = estimating_lines(liniaarray, degrees)
+    return esolinia
+
+def estimating_lines(a1, degrees):
+    # Find the range of x values in a1
+    min_a1_x, max_a1_x = min(a1[:, 0]), max(a1[:, 0])
+    # Create an evenly spaced array that ranges from the minimum to the maximum
+    # I used 1000 elements, but you can use more or fewer.
+    # This will be used as your new x coordinates
+    new_a1_x = np.linspace(min_a1_x, max_a1_x, 1000)
+    # Fit a XXXth degree polynomial to your data 0 - set XXX as high as possible, but lower than convergence (LS) error
+    a1_coefs = np.polyfit(a1[:, 0], a1[:, 1], degrees)
+    # Get your new y coordinates from the coefficients of the above polynomial
+    new_a1_y = np.polyval(a1_coefs, new_a1_x)
+
+    new_a1 = list(zip(new_a1_x, new_a1_y))
+    reversed_a1 = new_a1[::-1]
+    new_a1 = np.asarray(reversed_a1)
+    return new_a1
